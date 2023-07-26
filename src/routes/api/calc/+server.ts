@@ -1,30 +1,28 @@
-import { json } from '@sveltejs/kit';
+import { json } from "@sveltejs/kit";
 
-export async function POST( { request }: any ) {
-    const { firstNumber, secondNumber, operator } = await request.json();
-    console.log({firstNumber, secondNumber, operator})
+export async function POST( {request} : any) {
+    const { firstNumber, secondNumber, operatorer } = await request.json();
 
-    let total: number = 0;
+    console.log({ firstNumber, secondNumber, operatorer })
 
-    switch (operator) {
-        case '+': 
+    let total = 0;
+
+    switch (operatorer) {
+        case "+":
             total = Number(firstNumber) + Number(secondNumber);
             break;
-        case '-': 
+        case "-":
             total = Number(firstNumber) - Number(secondNumber);
             break;
-        case '*': 
+        case "*":
             total = Number(firstNumber) * Number(secondNumber);
             break;
-        case '/': 
+        case "/":
             total = Number(firstNumber) / Number(secondNumber);
             break;
-            
         default:
             break;
     }
 
     return json(total);
 }
-
-
