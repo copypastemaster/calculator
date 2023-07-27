@@ -1,0 +1,7 @@
+[] - array
+
+on click of an operator if array is empty, push the value of the input val after clicking an operator;
+clear the input;
+if the array has firstNum, the input val should be secondNum and push onto array.
+if array has firstNum, secondNum, operator, the computed value should be pushed on array[0];
+repeat;
