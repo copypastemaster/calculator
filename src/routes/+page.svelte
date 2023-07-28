@@ -1,93 +1,48 @@
 <script lang="ts">
    type Arr = number[];
-   type Val = number;
+   type Val = string;
    
    let defaultValues: Arr = []
-   let val: Val = 0;
+   let val: Val = '';
+   let result: number | string = '';
 
-   let firstNum: number | null = null
-   let secondNum: number | null = null
-   let operator: string = '';
 
-   
-   let check = [];
-   
-   console.log(`${check.length} -- check length`);
-   
-   const handleInput = (e): number => {
+   // push the textcontent on array;
+   // join the array and bind onto val;   
+   const handleInput = (e): string => {
     defaultValues.push(e.target.textContent);
-    val = +(defaultValues.join(''));
-    console.log(`defaultValues = ${defaultValues} val = ${val}`)
+    val = defaultValues.join('');
+    console.log(`Values -- ${val}`)
     return val;
    }
 
-   const handleOperator = (e) => {
-     switch (e.target.innerText) {
-        case '+':
-            operator = '+';
-            checker();
-            clear();
-            break;
-        case '-':
-            operator = '-';
-            checker();
-            clear();
-            break;
-        case '*':
-            operator = '*';
-            checker();
-            clear();
-            break;
-        case '/':
-            operator = '/';
-            checker();
-            clear();
-            break;
-     }
-   }
 
-   
-
-   const checker = () => {
-    if (firstNum == null ) {
-        firstNum = val;
-    }
-   
-
-   }
-
-   const clear = () => {
-    defaultValues.length = 0;
-    val = 0;
-   }
-
-   const del = () => {
-    val = 0;
-    defaultValues.length = 0;
-    firstNum = null;
-   }
-
-   async function sendData (firstNumber: number | null, secondNumber: number | null, operatorer: string) {
-            const res = await fetch("http://localhost:5173/api/calc", {
-                method: "POST",
-                body: JSON.stringify({
-                    firstNumber,
-                    secondNumber,
-                    operatorer,
-                })
+   // post the values to SSR
+   // set val as the returned total
+    async function sendData (values: string) {
+        const res = await fetch("http://localhost:5173/api/calc", {
+            method: "POST",
+            body: JSON.stringify({
+                values,
             })
-            const total = await res.json().then(data => val = data).catch(err => console.log(err));
-            console.log(`total is ${total}`);
-            firstNum = total;
-            console.log(`firstnum - ${firstNumber} secondnum - ${secondNumber} operator - ${operatorer}`)
-            return total;
+        })
+        const total = await res.json();
+        val = total;
+        console.log(total);
+    }
 
-        return 'hi'
-   }
 
-   const handleEqual = () => {
-        return sendData(firstNum, secondNum = val, operator);
-   }
+    
+    const handleEqual = () => {
+        sendData(val);
+    }
+
+
+
+    const clear = () => {
+        defaultValues.length = 0;
+        val = '';
+    }
 
 </script>
 
@@ -98,10 +53,10 @@
 <main>
     <input type="text" bind:value={val}/>
     <div class="operators">
-        <button on:click={handleOperator}>+</button>
-        <button on:click={handleOperator}>-</button>
-        <button on:click={handleOperator}>*</button>
-        <button on:click={handleOperator}>/</button>
+        <button on:click={handleInput}>+</button>
+        <button on:click={handleInput}>-</button>
+        <button on:click={handleInput}>*</button>
+        <button on:click={handleInput}>/</button>
     </div>
     <div class="numbers">
         <button on:click={handleInput}>7</button>
@@ -114,7 +69,7 @@
         <button on:click={handleInput}>2</button>
         <button on:click={handleInput}>3</button>
         <button on:click={handleInput}>0</button>
-        <button on:click={del}>C</button>
+        <button on:click={clear}>C</button>
         <button on:click={handleEqual}>=</button>
 
     </div>
