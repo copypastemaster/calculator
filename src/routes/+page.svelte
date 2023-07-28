@@ -17,8 +17,7 @@
    }
 
 
-   // post the values to SSR
-   // set val as the returned total
+   // post the values to SSR -- send data to server
     async function sendData (values: string) {
         const res = await fetch("http://localhost:5173/api/calc", {
             method: "POST",
@@ -26,13 +25,13 @@
                 values,
             })
         })
+
+   // set val as the returned total
         const total = await res.json();
         val = total;
-        console.log(total);
+        console.log(`total is ${total}`);
     }
 
-
-    
     const handleEqual = () => {
         sendData(val);
     }

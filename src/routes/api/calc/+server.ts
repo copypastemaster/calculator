@@ -52,6 +52,8 @@ export async function POST( {request} : any)  {
     
 
     return json(calculate(values));
+
+    // if not json, i'd use new Response(JSON.stringify,(val), {headers, 'Content-Type':})
 }
 
 
