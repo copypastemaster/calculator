@@ -3,41 +3,46 @@ import { json } from "@sveltejs/kit";
 export async function POST( {request} : any)  {
     const { values } = await request.json();
 
-    const calculate = (s) =>  {
+    const calculate = (item) =>  {
+
+
         let stack = [];
         let num: number | string = '';
-        let sign = null
+        let operator = null
+    
         
-        for(let i = 0; i <= s.length; i++){    
-          const curr = s[i];
-          //handle space
+        for(let i = 0; i <= item.length; i++){    
+
+          const curr = item[i];
+          
+          // if item is whitespace
           if(curr === ' ') continue;
-          //if char is a number
-          if(!isNaN(curr)) num+=curr;
-          //if we have a  sign + - / *
+
+          // if item is number
+          if(!isNaN(curr)) {
+            num+=curr;
+          }
+
+          // if we hav eoperator (+ - * /)
           if(isNaN(curr)){
             num = Number(num)
-            switch(sign){
+            switch(operator){
               case '+':
               case null:
                 stack.push(num)
                 break;
               case '-':
-                
                 stack.push(-num)
                 break; 
-              case '*':
-                
+              case '*':            
                 stack.push(stack.pop()*num)
                 break;
               case '/':
-                
-                stack.push(parseInt(stack.pop()/num, 10))
+                stack.push(parseFloat(stack.pop()/num, 10))
                 break;           
             }
             
-            sign = curr;
-            
+            operator = curr;         
             num = '';
           }
         }
@@ -48,6 +53,9 @@ export async function POST( {request} : any)  {
 
     return json(calculate(values));
 }
+
+
+
 
 
 
