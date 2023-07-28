@@ -25,27 +25,27 @@ export async function POST( {request} : any)  {
 
           // if we hav eoperator (+ - * /)
           if(isNaN(curr)){
-            num = Number(num)
-            switch(operator){
-              case '+':
-              case null:
-                stack.push(num)
-                break;
-              case '-':
-                stack.push(-num)
-                break; 
-              case '*':            
-                stack.push(stack.pop()*num)
-                break;
-              case '/':
-                stack.push(parseFloat(stack.pop()/num, 10))
-                break;           
+              num = Number(num)
+              switch(operator){
+                case '+':
+                case null:
+                  stack.push(num)
+                  break;
+                case '-':
+                  stack.push(-num)
+                  break; 
+                case '*':            
+                  stack.push(stack.pop() * num)
+                  break;
+                case '/':
+                  stack.push(parseFloat(stack.pop() / num))
+                  break;           
+              }
+              
+              operator = curr;         
+              num = '';
             }
-            
-            operator = curr;         
-            num = '';
           }
-        }
        
         return stack.reduce((a,b)=> a + b,0)
       };
